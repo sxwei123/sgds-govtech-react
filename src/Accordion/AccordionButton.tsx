@@ -41,8 +41,7 @@ export function useAccordionButton(
       Compare the event key in context with the given event key.
       If they are the same, then collapse the component.
     */
-    let eventKeyPassed: AccordionEventKey =
-      eventKey === activeEventKey ? null : eventKey;
+    let eventKeyPassed: AccordionEventKey;
     if (alwaysOpen) {
       if (Array.isArray(activeEventKey)) {
         if (activeEventKey.includes(eventKey)) {
@@ -51,8 +50,27 @@ export function useAccordionButton(
           eventKeyPassed = [...activeEventKey, eventKey];
         }
       } else {
-        // activeEventKey is undefined.
-        eventKeyPassed = [eventKey];
+        if (activeEventKey) {
+          eventKeyPassed =
+            eventKey === activeEventKey ? null : [activeEventKey, eventKey];
+        } else {
+          eventKeyPassed = [eventKey];
+        }
+      }
+    } else {
+      if (Array.isArray(activeEventKey)) {
+        // for the case when `alwaysOpen` prop set to false from true, the activeEventKey is still an array of keys
+        if (activeEventKey.includes(eventKey)) {
+          // when the current event key is one of the active keys, collapse the current and the rest of the active keys except for the first one
+          const eventKeys = activeEventKey.filter((k) => k !== eventKey);
+          const eventKeysInNumber = eventKeys.map(Number);
+          eventKeyPassed = Math.min(...eventKeysInNumber).toString();
+        } else {
+          // when the current event key is not one of the active keys, set it to expand and collapse all of the active keys
+          eventKeyPassed = eventKey;
+        }
+      } else {
+        eventKeyPassed = eventKey === activeEventKey ? null : eventKey;
       }
     }
 
