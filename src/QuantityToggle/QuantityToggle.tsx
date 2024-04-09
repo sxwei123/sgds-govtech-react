@@ -67,7 +67,8 @@ export const QuantityToggle: BsPrefixRefForwardingComponent<
       else setCount((prevCount) => prevCount - step);
     };
     const onChangeInput = (e: React.ChangeEvent<FormControlElement>) => {
-      setCount(parseInt(e.target.value));
+      const inputValue = e.target.value === '' ? 0 : parseInt(e.target.value);
+      setCount(inputValue);
     };
     const handleKeyDown = (event: React.KeyboardEvent<FormControlElement>) => {
       const allowedKeys = [
@@ -82,11 +83,6 @@ export const QuantityToggle: BsPrefixRefForwardingComponent<
       // Allow keydown event only if the pressed key is in the allowedKeys array
       if (!allowedKeys.includes(event.key)) {
         event.preventDefault();
-      }
-
-      if (event.key === 'Backspace' && count.toString().length === 1) {
-        event.preventDefault();
-        setCount(0);
       }
     };
 
