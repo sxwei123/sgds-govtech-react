@@ -212,7 +212,6 @@ export const DatePicker: BsPrefixRefForwardingComponent<
     const dayRefs = React.useRef<Array<HTMLTableCellElement | null>>([]);
     const monthRefs = React.useRef<Array<HTMLButtonElement | null>>([]);
     const yearRefs = React.useRef<Array<HTMLButtonElement | null>>([]);
-
     const getinitialInputDate = () => {
       if (!props.initialValue) {
         if (isRange) {
@@ -464,6 +463,7 @@ export const DatePicker: BsPrefixRefForwardingComponent<
 
     const calendarHeader = (
       <CalendarHeader
+        // id={calendarHeaderId}
         displayDate={state.displayDate as Date}
         onChange={onChangeMonth}
         resetFocusOnHeader={resetFocusOnHeader}
@@ -837,6 +837,11 @@ export const DatePicker: BsPrefixRefForwardingComponent<
       }
     }, [showCalendar, displayDate]);
 
+    const ariaLabelsForMenu = {
+      day: 'Choose date',
+      month: 'Choose month', 
+      year: 'Choose year'
+    }
     return (
       <DatePickerContext.Provider value={contextValue}>
         <Dropdown
@@ -888,7 +893,7 @@ export const DatePicker: BsPrefixRefForwardingComponent<
             as="div"
             role="dialog"
             aria-modal="true"
-            aria-label="Choose Date"
+            aria-label={ariaLabelsForMenu[view]}
           >
             <Dropdown.Header className="datepicker-header" role="none">
               {calendarHeader}

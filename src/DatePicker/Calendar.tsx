@@ -1,7 +1,10 @@
 import * as React from 'react';
 import DatePickerContext from './DatePickerContext';
 import { RangeSelectionValue, getTotalDaysInMonth } from './DatePicker';
+import dayjs from 'dayjs';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
 
+dayjs.extend(localizedFormat);
 interface CalendarProps extends React.HTMLAttributes<HTMLTableElement> {
   selectedDate: Date | RangeSelectionValue | undefined;
   displayDate: Date;
@@ -145,8 +148,11 @@ export const Calendar = React.forwardRef<HTMLTableElement, CalendarProps>(
       for (let j = 0; j <= 6; j++) {
         if (day <= monthLength && (i > 0 || j >= startingDay)) {
           let className = undefined;
+          let ariaSelected = false;
           const dayIndex = day;
           const date = new Date(year, month, day, 12, 0, 0, 0);
+          const localizedDate = dayjs(date).format('dddd, MMMM D, YYYY');
+
           const dateString = date.toISOString();
           const beforeMinDate =
             minimumDate &&
@@ -175,6 +181,7 @@ export const Calendar = React.forwardRef<HTMLTableElement, CalendarProps>(
             processedSelectedDate &&
             isSelectedDate(date, processedSelectedDate)
           ) {
+            ariaSelected = true;
             if (processedSelectedDate instanceof Date) {
               className = 'bg-primary-600 text-white';
             } else {
@@ -204,6 +211,8 @@ export const Calendar = React.forwardRef<HTMLTableElement, CalendarProps>(
           week.push(
             <td
               key={j}
+              aria-label={localizedDate}
+              aria-selected={ariaSelected}
               data-day={day}
               onClick={clickHandler}
               style={style}
@@ -343,7 +352,6 @@ export const Calendar = React.forwardRef<HTMLTableElement, CalendarProps>(
         className="text-center"
         role="grid"
         ref={ref}
-        aria-labelledby="id-grid-label"
         onKeyDown={handleKeyDown} // Attach the keydown event listener to the table
       >
         <thead>

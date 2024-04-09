@@ -381,3 +381,76 @@ describe('Range Calendar', () => {
     });
   });
 });
+
+import dayjs from 'dayjs';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+
+dayjs.extend(localizedFormat);
+
+describe('Calendar a11y', () => {
+  const mode = 'single';
+  const mockChangeDate = jest.fn();
+  const mockOnChangeMonth = jest.fn();
+  const mockhandleTabPressOnCalendarBody = jest.fn();
+  const dayRefs = React.createRef<Array<HTMLTableCellElement | null>>();
+  it('date in calendar is aria-labelled', () => {
+    const displayDate = new Date(2022, 2, 21);
+    const selectedDate = new Date(2022, 2, 18);
+    const { getByText } = render(
+      <Calendar
+        selectedDate={selectedDate}
+        displayDate={displayDate}
+        changeDate={mockChangeDate}
+        mode={mode}
+        show={true}
+        dayRefs={dayRefs}
+        onChangeMonth={mockOnChangeMonth}
+        handleTabPressOnCalendarBody={mockhandleTabPressOnCalendarBody}
+      />
+    );
+    const expected = dayjs(new Date(2022, 2, 1)).format('dddd, MMMM D, YYYY');
+    expect(getByText('1').getAttribute('aria-label')).toEqual(expected);
+  });
+
+  it('aria-selected=true on selectedDate, single mode', () => {
+    const displayDate = new Date(2022, 2, 21);
+    const selectedDate = new Date(2022, 2, 18);
+    const { getByText } = render(
+      <Calendar
+        selectedDate={selectedDate}
+        displayDate={displayDate}
+        changeDate={mockChangeDate}
+        mode={mode}
+        show={true}
+        dayRefs={dayRefs}
+        onChangeMonth={mockOnChangeMonth}
+        handleTabPressOnCalendarBody={mockhandleTabPressOnCalendarBody}
+      />
+    );
+    expect(getByText('18').getAttribute('aria-selected')).toEqual('true');
+    expect(getByText('21').getAttribute('aria-selected')).toEqual('false');
+  });
+  it('aria-selected=true on selectedDate, range mode', () => {
+    const displayDate = new Date(2022, 2, 21);
+    const selectedDate = {
+      start: new Date(2022, 2, 18),
+      end: new Date(2022, 2, 23),
+    };
+    const { getByText } = render(
+      <Calendar
+        selectedDate={selectedDate}
+        displayDate={displayDate}
+        changeDate={mockChangeDate}
+        mode="range"
+        show={true}
+        dayRefs={dayRefs}
+        onChangeMonth={mockOnChangeMonth}
+        handleTabPressOnCalendarBody={mockhandleTabPressOnCalendarBody}
+      />
+    );
+    for (let i = 18; i < 24; i++) {
+      expect(getByText(`${i}`).getAttribute('aria-selected')).toEqual('true');
+    }
+    expect(getByText('24').getAttribute('aria-selected')).toEqual('false');
+  });
+});
