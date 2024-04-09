@@ -107,7 +107,7 @@ export const QuantityToggle: BsPrefixRefForwardingComponent<
             ref={ref}
             type="number"
             className="text-center"
-            value={count}
+            value={count.toString()}
             name="quantity"
             onKeyDown={handleKeyDown}
             onChange={onChangeInput}
