@@ -2,9 +2,15 @@ import * as React from 'react';
 import { useContext } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import AccordionContext, {  AccordionEventKey } from './AccordionContext';
+import AccordionContext, {
+  AccordionEventKey,
+  isAccordionItemSelected,
+} from './AccordionContext';
 import AccordionItemContext from './AccordionItemContext';
-import { BsPrefixProps, BsPrefixRefForwardingComponent } from '../utils/helpers';
+import {
+  BsPrefixProps,
+  BsPrefixRefForwardingComponent,
+} from '../utils/helpers';
 import { useBootstrapPrefix } from '../ThemeProvider/ThemeProvider';
 
 type EventHandler = React.EventHandler<React.SyntheticEvent>;
@@ -26,7 +32,7 @@ const propTypes = {
 
 export function useAccordionButton(
   eventKey: string,
-  onClick?: EventHandler,
+  onClick?: EventHandler
 ): EventHandler {
   const { activeEventKey, onSelect, alwaysOpen } = useContext(AccordionContext);
 
@@ -68,7 +74,7 @@ export const AccordionButton: BsPrefixRefForwardingComponent<
       onClick,
       ...props
     },
-    ref,
+    ref
   ) => {
     bsPrefix = useBootstrapPrefix(bsPrefix, 'accordion-button');
     const { eventKey } = useContext(AccordionItemContext);
@@ -88,11 +94,11 @@ export const AccordionButton: BsPrefixRefForwardingComponent<
         className={classNames(
           className,
           bsPrefix,
-          eventKey !== activeEventKey && 'collapsed',
+          !isAccordionItemSelected(activeEventKey, eventKey) && 'collapsed'
         )}
       />
     );
-  },
+  }
 );
 
 AccordionButton.propTypes = propTypes;
