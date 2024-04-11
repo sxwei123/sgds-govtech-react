@@ -648,7 +648,6 @@ export const DatePicker: BsPrefixRefForwardingComponent<
       if (nextShow) {
         setShowCalendar(true);
       } else {
-        dropdownToggleRef?.current?.focus();
         setShowCalendar(false);
       }
     };
@@ -839,9 +838,9 @@ export const DatePicker: BsPrefixRefForwardingComponent<
 
     const ariaLabelsForMenu = {
       day: 'Choose date',
-      month: 'Choose month', 
-      year: 'Choose year'
-    }
+      month: 'Choose month',
+      year: 'Choose year',
+    };
     return (
       <DatePickerContext.Provider value={contextValue}>
         <Dropdown

@@ -2167,4 +2167,21 @@ describe('Datepicker a11y', () => {
       container.querySelector('div[role="dialog"]')?.getAttribute('aria-label')
     ).toEqual('Choose year');
   });
+
+  it('datepicker focuses on input element when it calendar closes', async () => {
+    const { container, getByText } = render(
+      <DatePicker displayDate={new Date('2020-01-01')} />
+    );
+    fireEvent.click(container.querySelector('button.dropdown-toggle')!);
+    await waitFor(() =>
+      expect(container.querySelector('.dropdown-menu.show')).toBeInTheDocument()
+    );
+    fireEvent.click(getByText("2"))
+    await waitFor(() => {
+      expect(
+        container.querySelector('.dropdown-menu.show')
+      ).not.toBeInTheDocument();
+    });
+    expect(container.querySelector('input')).toHaveFocus();
+  });
 });
