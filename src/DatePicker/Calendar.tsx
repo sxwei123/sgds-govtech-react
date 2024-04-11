@@ -160,15 +160,14 @@ export const Calendar = React.forwardRef<HTMLTableElement, CalendarProps>(
           const afterMaxDate =
             maximumDate &&
             Date.parse(dateString) > Date.parse(maximumDate.toISOString());
-
+          const isCurrentDate =
+            Date.parse(dateString) === Date.parse(currentDate.toISOString());
           let clickHandler: React.MouseEventHandler | undefined = handleClick;
           const style = {
             cursor: 'pointer',
             borderRadius: 0,
           };
-          if (
-            Date.parse(dateString) === Date.parse(currentDate.toISOString())
-          ) {
+          if (isCurrentDate) {
             // if date is the current Date
             className = 'text-primary';
           }
@@ -213,6 +212,7 @@ export const Calendar = React.forwardRef<HTMLTableElement, CalendarProps>(
               key={j}
               aria-label={localizedDate}
               aria-selected={ariaSelected}
+              aria-current={isCurrentDate ? 'date' : undefined}
               data-day={day}
               onClick={clickHandler}
               style={style}

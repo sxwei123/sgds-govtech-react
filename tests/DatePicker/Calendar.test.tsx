@@ -453,4 +453,22 @@ describe('Calendar a11y', () => {
     }
     expect(getByText('24').getAttribute('aria-selected')).toEqual('false');
   });
+
+  it("aria-current=date for today's date", () => {
+    const displayDate = new Date();
+    const { getByText } = render(
+      <Calendar
+        selectedDate={undefined}
+        displayDate={displayDate}
+        changeDate={mockChangeDate}
+        mode="range"
+        show={true}
+        dayRefs={dayRefs}
+        onChangeMonth={mockOnChangeMonth}
+        handleTabPressOnCalendarBody={mockhandleTabPressOnCalendarBody}
+      />
+    );
+    const day = new Date().getDate();
+    expect(getByText(`${day}`).getAttribute("aria-current")).toEqual('date')
+  });
 });

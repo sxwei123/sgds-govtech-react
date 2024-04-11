@@ -65,7 +65,7 @@ describe('MonthView a11y', () => {
     const { getByText } = render(
       <MonthView
         onClickMonth={mockFn}
-        selectedDate={selectedDate}
+        selectedDate={new Date(2024, 3, 11)}
         displayDate={displayDate}
         show={true}
         onChangeMonth={mockOnChangeMonth}
@@ -119,4 +119,22 @@ describe('MonthView a11y', () => {
       );
     }
   });
+  it("current month should be indicated in aria-label" , () => {
+    const { getByText } = render(
+      <MonthView
+        onClickMonth={mockFn}
+        selectedDate={undefined}
+        displayDate={displayDate}
+        show={true}
+        onChangeMonth={mockOnChangeMonth}
+        handleTabPressOnCalendarBody={mockhandleTabPressOnCalendarBody}
+        monthRefs={monthRefs}
+      />
+    );
+    const currentMonth = new Date().getMonth()
+    const currentMonthName = MONTH_LABELS[currentMonth].slice(0,3)
+    expect(getByText(currentMonthName).getAttribute('aria-label')).toContain(
+      "Current month"
+    );
+  })
 });

@@ -115,4 +115,23 @@ describe('YearView a11y', () => {
     }
     expect(getByText('2019').getAttribute('aria-selected')).toEqual('false');
   });
+
+  it('current year should be indicated in aria-label', () => {
+    const { getByText } = render(
+      <YearView
+        onClickYear={mockFn}
+        selectedDate={undefined}
+        displayDate={new Date()}
+        show={true}
+        onChangeMonth={mockOnChangeMonth}
+        handleTabPressOnCalendarBody={mockhandleTabPressOnCalendarBody}
+        yearRefs={yearRefs}
+      />
+    );
+    const currentYear = new Date().getFullYear()
+    expect(getByText(`${currentYear}`).getAttribute('aria-label')).toContain(
+      "Current year"
+    );
+  });
+
 });
