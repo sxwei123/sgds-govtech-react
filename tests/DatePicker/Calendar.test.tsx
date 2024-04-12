@@ -241,7 +241,7 @@ describe('Single mode Calendar', () => {
     const activeRange = [15, 16, 17, 18, 19, 20, 21];
     activeRange.forEach((day) => {
       expect(getByText(day).classList).not.toContain('text-muted');
-      expect(getByText(day).style.cursor).toEqual('pointer');
+      expect(getByText(day).classList).toContain('pe-auto');
     });
 
     fireEvent.click(getByText('21'));
@@ -257,14 +257,15 @@ describe('Single mode Calendar', () => {
     });
     fireEvent.click(getByText('14'));
     expect(getByText('14').classList).toContain('text-muted');
-    expect(getByText('14').style.cursor).toEqual('default');
+    expect(getByText('14').classList).toContain('pe-none');
+    expect(getByText('14').classList).not.toContain('pe-auto');
     await waitFor(() => {
       expect(mockChangeDate).not.toHaveBeenCalled();
       mockChangeDate.mockReset();
     });
     fireEvent.click(getByText('22'));
     expect(getByText('22').classList).toContain('text-muted');
-    expect(getByText('22').style.cursor).toEqual('default');
+    expect(getByText('22').classList).toContain('pe-none');
     await waitFor(() => {
       expect(mockChangeDate).not.toHaveBeenCalled();
       mockChangeDate.mockReset();
@@ -428,7 +429,7 @@ describe('Calendar a11y', () => {
       />
     );
     expect(getByText('18').getAttribute('aria-selected')).toEqual('true');
-    expect(getByText('21').getAttribute('aria-selected')).toEqual('false');
+    expect(getByText('21').getAttribute('aria-selected')).toBeNull();
   });
   it('aria-selected=true on selectedDate, range mode', () => {
     const displayDate = new Date(2022, 2, 21);
@@ -451,7 +452,7 @@ describe('Calendar a11y', () => {
     for (let i = 18; i < 24; i++) {
       expect(getByText(`${i}`).getAttribute('aria-selected')).toEqual('true');
     }
-    expect(getByText('24').getAttribute('aria-selected')).toEqual('false');
+    expect(getByText('24').getAttribute('aria-selected')).toBeNull();
   });
 
   it("aria-current=date for today's date", () => {
@@ -469,6 +470,6 @@ describe('Calendar a11y', () => {
       />
     );
     const day = new Date().getDate();
-    expect(getByText(`${day}`).getAttribute("aria-current")).toEqual('date')
+    expect(getByText(`${day}`).getAttribute('aria-current')).toEqual('date');
   });
 });

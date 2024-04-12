@@ -147,8 +147,8 @@ export const Calendar = React.forwardRef<HTMLTableElement, CalendarProps>(
       const week = [];
       for (let j = 0; j <= 6; j++) {
         if (day <= monthLength && (i > 0 || j >= startingDay)) {
-          let className = undefined;
-          let ariaSelected = false;
+          let classNames = ['pe-auto', 'rounded-0'];
+          let ariaSelected = undefined;
           const dayIndex = day;
           const date = new Date(year, month, day, 12, 0, 0, 0);
           const localizedDate = dayjs(date).format('dddd, MMMM D, YYYY');
@@ -163,18 +163,16 @@ export const Calendar = React.forwardRef<HTMLTableElement, CalendarProps>(
           const isCurrentDate =
             Date.parse(dateString) === Date.parse(currentDate.toISOString());
           let clickHandler: React.MouseEventHandler | undefined = handleClick;
-          const style = {
-            cursor: 'pointer',
-            borderRadius: 0,
-          };
           if (isCurrentDate) {
             // if date is the current Date
-            className = 'text-primary';
+            classNames.push('text-primary');
           }
           if (beforeMinDate || afterMaxDate) {
-            className = 'text-muted';
+            classNames.push('text-muted');
+            classNames = classNames.filter((c) => c !== 'pe-auto');
+            classNames.push('pe-none');
+
             clickHandler = undefined;
-            style.cursor = 'default';
           }
           if (
             processedSelectedDate &&
@@ -182,27 +180,24 @@ export const Calendar = React.forwardRef<HTMLTableElement, CalendarProps>(
           ) {
             ariaSelected = true;
             if (processedSelectedDate instanceof Date) {
-              className = 'bg-primary-600 text-white';
+              classNames.push('bg-primary-600');
+              classNames.push('text-white');
             } else {
               const { start, end } = processedSelectedDate;
-              className = 'bg-primary-100';
-
               if (
-                start &&
-                start.getDate() === day &&
-                start.getMonth() === month &&
-                start.getFullYear() === year
+                (start &&
+                  start.getDate() === day &&
+                  start.getMonth() === month &&
+                  start.getFullYear() === year) ||
+                (end &&
+                  end.getDate() === day &&
+                  end.getMonth() === month &&
+                  end.getFullYear() === year)
               ) {
-                className = 'bg-primary-600 text-white';
-              }
-
-              if (
-                end &&
-                end.getDate() === day &&
-                end.getMonth() === month &&
-                end.getFullYear() === year
-              ) {
-                className = 'bg-primary-600 text-white';
+                classNames.push('bg-primary-600');
+                classNames.push('text-white');
+              } else {
+                classNames.push('bg-primary-100');
               }
             }
           }
@@ -210,13 +205,13 @@ export const Calendar = React.forwardRef<HTMLTableElement, CalendarProps>(
           week.push(
             <td
               key={j}
+              role="button"
               aria-label={localizedDate}
               aria-selected={ariaSelected}
               aria-current={isCurrentDate ? 'date' : undefined}
               data-day={day}
               onClick={clickHandler}
-              style={style}
-              className={className}
+              className={classNames.join(' ')}
               tabIndex={-1}
               ref={(el) =>
                 props.dayRefs.current
