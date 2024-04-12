@@ -224,6 +224,7 @@ const CalendarHeader = React.forwardRef<HTMLDivElement, CalendarHeaderProps>(
         onClick={changeView}
         onKeyDown={handlePressChangeView}
         aria-disabled={view === 'year'}
+        className={view === 'year' ? "disabled" : undefined}
         aria-live="polite"
         aria-label={ariaLabel}
       >

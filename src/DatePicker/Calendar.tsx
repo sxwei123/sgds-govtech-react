@@ -3,6 +3,7 @@ import DatePickerContext from './DatePickerContext';
 import { RangeSelectionValue, getTotalDaysInMonth } from './DatePicker';
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
+import classNames from 'classnames';
 
 dayjs.extend(localizedFormat);
 interface CalendarProps extends React.HTMLAttributes<HTMLTableElement> {
@@ -147,8 +148,6 @@ export const Calendar = React.forwardRef<HTMLTableElement, CalendarProps>(
       const week = [];
       for (let j = 0; j <= 6; j++) {
         if (day <= monthLength && (i > 0 || j >= startingDay)) {
-          let classNames = ['pe-auto', 'rounded-0'];
-          let ariaSelected = undefined;
           const dayIndex = day;
           const date = new Date(year, month, day, 12, 0, 0, 0);
           const localizedDate = dayjs(date).format('dddd, MMMM D, YYYY');
@@ -162,56 +161,46 @@ export const Calendar = React.forwardRef<HTMLTableElement, CalendarProps>(
             Date.parse(dateString) > Date.parse(maximumDate.toISOString());
           const isCurrentDate =
             Date.parse(dateString) === Date.parse(currentDate.toISOString());
-          let clickHandler: React.MouseEventHandler | undefined = handleClick;
-          if (isCurrentDate) {
-            // if date is the current Date
-            classNames.push('text-primary');
-          }
-          if (beforeMinDate || afterMaxDate) {
-            classNames.push('text-muted');
-            classNames = classNames.filter((c) => c !== 'pe-auto');
-            classNames.push('pe-none');
-
-            clickHandler = undefined;
-          }
-          if (
+          const isOutOfMinMaxRange = beforeMinDate || afterMaxDate;
+          const hasSelectedDate =
             processedSelectedDate &&
-            isSelectedDate(date, processedSelectedDate)
-          ) {
-            ariaSelected = true;
-            if (processedSelectedDate instanceof Date) {
-              classNames.push('bg-primary-600');
-              classNames.push('text-white');
-            } else {
-              const { start, end } = processedSelectedDate;
-              if (
-                (start &&
-                  start.getDate() === day &&
-                  start.getMonth() === month &&
-                  start.getFullYear() === year) ||
-                (end &&
-                  end.getDate() === day &&
-                  end.getMonth() === month &&
-                  end.getFullYear() === year)
-              ) {
-                classNames.push('bg-primary-600');
-                classNames.push('text-white');
-              } else {
-                classNames.push('bg-primary-100');
-              }
-            }
-          }
+            isSelectedDate(date, processedSelectedDate);
+          const hasSelectedDateInModeSingle =
+            hasSelectedDate && processedSelectedDate instanceof Date;
+          const hasSelectedDateInModeRange =
+            hasSelectedDate && !(processedSelectedDate instanceof Date);
+          const { start, end } = hasSelectedDateInModeRange
+            ? processedSelectedDate
+            : { start: undefined, end: undefined };
+          const areSelectedEnds =
+            (start &&
+              start.getDate() === day &&
+              start.getMonth() === month &&
+              start.getFullYear() === year) ||
+            (end &&
+              end.getDate() === day &&
+              end.getMonth() === month &&
+              end.getFullYear() === year);
+
+          const notSelectedEnds =
+            hasSelectedDateInModeRange && !areSelectedEnds;
 
           week.push(
             <td
               key={j}
               role="button"
               aria-label={localizedDate}
-              aria-selected={ariaSelected}
+              aria-selected={hasSelectedDate ?  "true": undefined}
               aria-current={isCurrentDate ? 'date' : undefined}
               data-day={day}
-              onClick={clickHandler}
-              className={classNames.join(' ')}
+              onClick={isOutOfMinMaxRange ? undefined : handleClick}
+              className={classNames(
+                isCurrentDate && 'text-primary',
+                isOutOfMinMaxRange && 'disabled',
+                hasSelectedDateInModeSingle && 'text-white bg-primary-600',
+                areSelectedEnds && 'bg-primary-600 text-white',
+                notSelectedEnds && 'bg-primary-100'
+              )}
               tabIndex={-1}
               ref={(el) =>
                 props.dayRefs.current

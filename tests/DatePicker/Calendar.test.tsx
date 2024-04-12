@@ -240,8 +240,7 @@ describe('Single mode Calendar', () => {
     );
     const activeRange = [15, 16, 17, 18, 19, 20, 21];
     activeRange.forEach((day) => {
-      expect(getByText(day).classList).not.toContain('text-muted');
-      expect(getByText(day).classList).toContain('pe-auto');
+      expect(getByText(day).classList).not.toContain('disabled');
     });
 
     fireEvent.click(getByText('21'));
@@ -256,16 +255,13 @@ describe('Single mode Calendar', () => {
       mockChangeDate.mockReset();
     });
     fireEvent.click(getByText('14'));
-    expect(getByText('14').classList).toContain('text-muted');
-    expect(getByText('14').classList).toContain('pe-none');
-    expect(getByText('14').classList).not.toContain('pe-auto');
+    expect(getByText('14').classList).toContain('disabled');
     await waitFor(() => {
       expect(mockChangeDate).not.toHaveBeenCalled();
       mockChangeDate.mockReset();
     });
     fireEvent.click(getByText('22'));
-    expect(getByText('22').classList).toContain('text-muted');
-    expect(getByText('22').classList).toContain('pe-none');
+    expect(getByText('22').classList).toContain('disabled');
     await waitFor(() => {
       expect(mockChangeDate).not.toHaveBeenCalled();
       mockChangeDate.mockReset();
