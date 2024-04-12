@@ -1878,6 +1878,20 @@ describe('DatePicker', () => {
       expect(getByText('Please enter a valid date')).toBeInTheDocument();
     });
   });
+  it('when a date is typed into input, it updates the calendar view', async () => {
+    const displayDate = new Date(2024, 3, 12);
+    const { container, getByText } = render(
+      <DatePicker displayDate={displayDate} />
+    );
+    const input = container.querySelector('input')!;
+    const toggleButton = container.querySelector('.dropdown-toggle')!;
+    fireEvent.click(toggleButton);
+    await waitFor(() => expect(getByText('April 2024')).toBeInTheDocument());
+
+    fireEvent.change(input, { target: { value: '01012020' } });
+    fireEvent.click(toggleButton);
+    await waitFor(() => expect(getByText('January 2020')).toBeInTheDocument());
+  });
 });
 
 describe('Datepicker Range mode', () => {
@@ -2176,7 +2190,7 @@ describe('Datepicker a11y', () => {
     await waitFor(() =>
       expect(container.querySelector('.dropdown-menu.show')).toBeInTheDocument()
     );
-    fireEvent.click(getByText("2"))
+    fireEvent.click(getByText('2'));
     await waitFor(() => {
       expect(
         container.querySelector('.dropdown-menu.show')

@@ -463,7 +463,6 @@ export const DatePicker: BsPrefixRefForwardingComponent<
 
     const calendarHeader = (
       <CalendarHeader
-        // id={calendarHeaderId}
         displayDate={state.displayDate as Date}
         onChange={onChangeMonth}
         resetFocusOnHeader={resetFocusOnHeader}
@@ -537,12 +536,12 @@ export const DatePicker: BsPrefixRefForwardingComponent<
     const enterDateSingle = (event: React.ChangeEvent<HTMLInputElement>) => {
       const enteredDate = event.target.value;
       const parsedDate = dayjs(enteredDate, dateFormat).toDate();
-      const afterMinDate =
-        props.minDate &&
-        setTimeToNoon(parsedDate) >= setTimeToNoon(new Date(props.minDate));
-      const beforeMaxDate =
-        props.maxDate &&
-        setTimeToNoon(parsedDate) <= setTimeToNoon(new Date(props.maxDate));
+      const afterMinDate = props.minDate
+        ? setTimeToNoon(parsedDate) >= setTimeToNoon(new Date(props.minDate))
+        : true;
+      const beforeMaxDate = props.maxDate
+        ? setTimeToNoon(parsedDate) <= setTimeToNoon(new Date(props.maxDate))
+        : true;
       if (
         isValidDate(enteredDate, dateFormat) &&
         parsedDate.getFullYear() >= 1900 &&
