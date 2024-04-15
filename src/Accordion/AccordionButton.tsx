@@ -36,43 +36,45 @@ export function useAccordionButton(
 ): EventHandler {
   const { activeEventKey, onSelect, alwaysOpen } = useContext(AccordionContext);
 
+  const handleMultipleActiveKey = (activeEventKey: AccordionEventKey) => {
+    if (Array.isArray(activeEventKey)) {
+      return activeEventKey.includes(eventKey)
+        ? activeEventKey.filter((k) => k !== eventKey)
+        : [...activeEventKey, eventKey];
+    }
+
+    if (activeEventKey) {
+      return eventKey === activeEventKey ? null : [activeEventKey, eventKey];
+    }
+
+    return [eventKey];
+  };
+
+  const handleSingleActiveKey = (activeEventKey: AccordionEventKey) => {
+    // for the case when `alwaysOpen` prop set to false from true, the activeEventKey is still an array of keys
+    if (Array.isArray(activeEventKey)) {
+      if (activeEventKey.includes(eventKey)) {
+        // when the current event key is one of the active keys, collapse the current and the rest of the active keys except for the first one
+        const eventKeys = activeEventKey.filter((k) => k !== eventKey);
+        const eventKeysInNumber = eventKeys.map(Number);
+        return Math.min(...eventKeysInNumber).toString();
+      } else {
+        // when the current event key is not one of the active keys, set it to expand and collapse all of the active keys
+        return eventKey;
+      }
+    }
+
+    return eventKey === activeEventKey ? null : eventKey;
+  };
+
   return (e) => {
     /*
       Compare the event key in context with the given event key.
       If they are the same, then collapse the component.
     */
-    let eventKeyPassed: AccordionEventKey;
-    if (alwaysOpen) {
-      if (Array.isArray(activeEventKey)) {
-        if (activeEventKey.includes(eventKey)) {
-          eventKeyPassed = activeEventKey.filter((k) => k !== eventKey);
-        } else {
-          eventKeyPassed = [...activeEventKey, eventKey];
-        }
-      } else {
-        if (activeEventKey) {
-          eventKeyPassed =
-            eventKey === activeEventKey ? null : [activeEventKey, eventKey];
-        } else {
-          eventKeyPassed = [eventKey];
-        }
-      }
-    } else {
-      if (Array.isArray(activeEventKey)) {
-        // for the case when `alwaysOpen` prop set to false from true, the activeEventKey is still an array of keys
-        if (activeEventKey.includes(eventKey)) {
-          // when the current event key is one of the active keys, collapse the current and the rest of the active keys except for the first one
-          const eventKeys = activeEventKey.filter((k) => k !== eventKey);
-          const eventKeysInNumber = eventKeys.map(Number);
-          eventKeyPassed = Math.min(...eventKeysInNumber).toString();
-        } else {
-          // when the current event key is not one of the active keys, set it to expand and collapse all of the active keys
-          eventKeyPassed = eventKey;
-        }
-      } else {
-        eventKeyPassed = eventKey === activeEventKey ? null : eventKey;
-      }
-    }
+    const eventKeyPassed: AccordionEventKey = alwaysOpen
+      ? handleMultipleActiveKey(activeEventKey)
+      : handleSingleActiveKey(activeEventKey);
 
     onSelect?.(eventKeyPassed, e);
     onClick?.(e);
