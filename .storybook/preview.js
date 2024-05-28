@@ -1,4 +1,5 @@
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import './static/global.css';
 // https://storybook.js.org/docs/react/writing-stories/parameters#global-parameters
 export const parameters = {
   // https://storybook.js.org/docs/react/essentials/actions#automatically-matching-args
@@ -10,7 +11,11 @@ export const parameters = {
   // },
   options: {
     storySort: {
-      order: ['Install', 'Usage', 'Components'],
+      order: [
+        'Getting Started',
+        ['Installation', 'Introduction', 'Usage', 'Frameworks'],
+        'Components',
+      ],
     },
   },
 };

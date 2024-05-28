@@ -1,0 +1,13 @@
+.intro-cards-container {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: stretch;
+}
+
+.intro-cards {
+    border: none;
+    background-color: #f6f7fb;
+    border-radius: 24px;
+    height: 100%;
+}
