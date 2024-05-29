@@ -33,7 +33,7 @@ import '@govtechsg/sgds/css/sgds.css';
 ```js
 //In index.html
 <link
-  href="https://cdn.jsdelivr.net/npm/@govtechsg/sgds@<version>/css/sgds.css"
+  href="https://cdn.jsdelivr.net/npm/@govtechsg/sgds@__VERSION__/css/sgds.css"
   rel="stylesheet"
   type="text/css"
 />
