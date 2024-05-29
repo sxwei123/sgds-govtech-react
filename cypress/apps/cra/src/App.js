@@ -1,6 +1,6 @@
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import '@govtechsg/sgds/sass/sgds.scss';
-
+// import './bootstrap.scss';
+import './index.scss';
 import {
   AccordionCom,
   AlertCom,
@@ -24,8 +24,8 @@ import {
   TableCom,
   TabsCom,
   ToastCom,
-  TooltipCom
-} from "./components";
+  TooltipCom,
+} from './components';
 
 function App() {
   return (

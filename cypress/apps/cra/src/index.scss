@@ -1,0 +1,141 @@
+// Configuration
+
+@import '@govtechsg/sgds/sass/functions';
+@import '@govtechsg/sgds/sass/variables';
+$enable-cssgrid: true;
+
+@import '@govtechsg/sgds/sass/mixins';
+@import '@govtechsg/sgds/sass/utilities';
+$primary: #3fb247;
+$custom-primarys: (
+  'primary-100': #52e85c,
+  'primary-200': #4dd956,
+  'primary-300': #39a340,
+  'primary-400': #3ba442,
+  'primary-500': #3fb247,
+  'primary-600': #308636,
+  'primary-700': #1b4a1e,
+  'primary-800': #0f2b11,
+  'primary-900': #020502,
+) !default;
+$custom-secondarys: (
+  'primary-100': rgb(170, 170, 235),
+  'primary-200': rgb(111, 111, 241),
+  'primary-300': rgb(91, 91, 239),
+  'primary-400': rgb(42, 42, 216),
+  'primary-500': blue,
+  'primary-600': rgb(14, 14, 192),
+  'primary-700': rgb(9, 9, 104),
+  'primary-800': rgb(1, 1, 44),
+  'primary-900': rgb(0, 0, 4),
+) !default;
+
+$primarys: map-merge($primarys, $custom-primarys);
+$secondarys: map-merge($secondarys, $custom-secondarys);
+$custom-theme-colors: map-merge(
+  $theme-colors,
+  (
+    'primary': $primary,
+  )
+);
+$custom-theme-colors-set: map-merge(
+  $theme-colors-set,
+  (
+    'primary': $primarys,
+    'secondary': $secondarys,
+  )
+);
+$theme-colors: map-merge($theme-colors, $custom-theme-colors);
+$theme-colors-rgb: map-loop($theme-colors, to-rgb, '$value');
+$theme-colors-set: map-merge($theme-colors-set, $custom-theme-colors-set);
+
+$utilities-colors: map-merge($utilities-colors, $theme-colors-rgb);
+$utilities-text-colors: map-loop(
+  $utilities-colors,
+  rgba-css-var,
+  '$key',
+  'text'
+);
+$utilities-bg-colors: map-loop($utilities-colors, rgba-css-var, '$key', 'bg');
+
+$all-colors: map-merge-multiple(
+  $primarys,
+  $secondarys,
+  $purples,
+  $reds,
+  $yellows,
+  $greens,
+  $cyans
+);
+
+$utilities: map-merge(
+  $utilities,
+  (
+    'color':
+      map-merge(
+        map-get($utilities, 'color'),
+        (
+          values:
+            map-merge(
+              map-get(map-get($utilities, 'color'), 'values'),
+              ($all-colors)
+            ),
+        )
+      ),
+    'background-color':
+      map-merge(
+        map-get($utilities, 'background-color'),
+        (
+          values:
+            map-merge(
+              map-get(map-get($utilities, 'background-color'), 'values'),
+              ($all-colors)
+            ),
+        )
+      ),
+  )
+);
+
+// @import '@govtechsg/sgds/sass/root';
+// @import '@govtechsg/sgds/sass/reboot';
+// @import '@govtechsg/sgds/sass/type';
+// @import '@govtechsg/sgds/sass/images';
+// @import '@govtechsg/sgds/sass/containers';
+// @import '@govtechsg/sgds/sass/grid';
+// // @import '@govtechsg/sgds/sass/table';
+// @import '@govtechsg/sgds/sass/forms';
+// // @import '@govtechsg/sgds/sass/footer';
+// @import '@govtechsg/sgds/sass/buttons';
+// @import '@govtechsg/sgds/sass/transitions';
+// // @import '@govtechsg/sgds/sass/datepicker';
+// @import '@govtechsg/sgds/sass/dropdown';
+// // @import '@govtechsg/sgds/sass/fileupload';
+// @import '@govtechsg/sgds/sass/navbar';
+// @import '@govtechsg/sgds/sass/card';
+// @import '@govtechsg/sgds/sass/accordion';
+// @import '@govtechsg/sgds/sass/breadcrumb';
+// @import '@govtechsg/sgds/sass/pagination';
+// @import '@govtechsg/sgds/sass/list-group';
+// @import '@govtechsg/sgds/sass/badge';
+// @import '@govtechsg/sgds/sass/alert';
+// @import '@govtechsg/sgds/sass/progress';
+// @import '@govtechsg/sgds/sass/close';
+// // @import '@govtechsg/sgds/sass/sidenav';
+// // @import '@govtechsg/sgds/sass/stepper';
+// @import '@govtechsg/sgds/sass/toasts';
+// @import '@govtechsg/sgds/sass/modal';
+// // @import '@govtechsg/sgds/sass/tabs';
+// @import '@govtechsg/sgds/sass/tooltip';
+// @import '@govtechsg/sgds/sass/popover';
+// @import '@govtechsg/sgds/sass/carousel';
+// @import '@govtechsg/sgds/sass/spinners';
+// @import '@govtechsg/sgds/sass/offcanvas';
+// @import '@govtechsg/sgds/sass/placeholders';
+// // @import '@govtechsg/sgds/sass/combobox';
+// //Helpers
+// @import '@govtechsg/sgds/sass/helpers';
+// //Utilites
+// @import '@govtechsg/sgds/sass/utilities/api';
+
+// @import '@govtechsg/sgds/sass/templates';
+@import '@govtechsg/sgds/sass/sgds';
