@@ -1,5 +1,4 @@
 import 'bootstrap-icons/font/bootstrap-icons.css';
-// import './bootstrap.scss';
 import './index.scss';
 import {
   AccordionCom,
