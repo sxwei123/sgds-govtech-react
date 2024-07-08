@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const packageLock = require("../package-lock.json")
 module.exports = {
   webpackFinal: async (config) => {
     config.plugins.push(
@@ -6,6 +7,15 @@ module.exports = {
         __IS_DEV__: process.env.NODE_ENV === 'development',
       })
     );
+
+    config.module.rules.push({
+      test: /installation\.md$/,
+      loader: 'string-replace-loader',
+      options: {
+        search: /__VERSION__/gm,
+        replace: packageLock.packages["node_modules/@govtechsg/sgds"].version,
+      },
+    });
     return config;
   },
   stories: [
@@ -26,20 +36,22 @@ module.exports = {
       shouldExtractLiteralValuesFromEnum: true,
       propFilter: (prop) => {
         return prop.parent
-            ?  prop.parent.name !== 'DOMAttributes' && !prop.parent.name.includes('HTMLAttributes')  && prop.parent.name !== 'AriaAttributes'
-            : true;
+          ? prop.parent.name !== 'DOMAttributes' &&
+              !prop.parent.name.includes('HTMLAttributes') &&
+              prop.parent.name !== 'AriaAttributes'
+          : true;
       },
       compilerOptions: {
         allowSyntheticDefaultImports: false,
         esModuleInterop: false,
       },
-    }
+    },
   },
   rules: [
     // ...
     {
       test: /\.mdx?$/,
-      use: ['babel-loader', '@mdx-js/loader']
-    }
-  ]
+      use: ['babel-loader', '@mdx-js/loader'],
+    },
+  ],
 };
