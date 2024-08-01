@@ -16,6 +16,7 @@ export const parameters = {
       order: [
         'Getting Started',
         ['Introduction', 'Installation', 'Usage', 'Frameworks'],
+        'Troubleshooting',
         'Components',
       ],
     },
