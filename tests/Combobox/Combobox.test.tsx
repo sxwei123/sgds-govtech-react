@@ -455,11 +455,11 @@ describe('<Combobox>', () => {
     expect(getByText('test')).toBeInTheDocument();
   });
 
-  it('when icon not defined, there is no icon ', () => {
+  it('icon has a default value ', () => {
     const { container } = render(<Combobox menuList={menuList} />);
     expect(
-      container.querySelector('.dropdown.combobox> i.form-control-icon')
-    ).not.toBeInTheDocument();
+      container.querySelector('.dropdown.combobox> i.form-control-icon.bi-chevron-down')
+    ).toBeInTheDocument();
   });
   it('when icon defined, icon in container', () => {
     const { container } = render(
@@ -469,6 +469,17 @@ describe('<Combobox>', () => {
     expect(
       container.querySelector(
         '.dropdown.combobox> i.form-control-icon.bi.bi-search'
+      )
+    ).toBeInTheDocument();
+  });
+  it('when scrollable=true, adds scrollable class to combobox', () => {
+    const { container } = render(
+      <Combobox menuList={menuList} scrollable icon={<i className="bi bi-search"></i>} />
+    );
+
+    expect(
+      container.querySelector(
+        '.dropdown.combobox.scrollable'
       )
     ).toBeInTheDocument();
   });
