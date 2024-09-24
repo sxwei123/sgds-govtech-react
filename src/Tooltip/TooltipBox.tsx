@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import * as React from 'react';
-import { OverlayArrowProps } from '@restart/ui/Overlay';
 import { useBootstrapPrefix, useIsRTL, SGDSWrapper } from '../ThemeProvider/ThemeProvider';
 import { Placement } from '../utils/types';
 import { BsPrefixProps, getOverlayDirection } from '../utils/helpers';
@@ -10,7 +9,6 @@ export interface TooltipBoxProps
   extends React.HTMLAttributes<HTMLDivElement>,
     BsPrefixProps {
   placement?: Placement;
-  arrowProps?: Partial<OverlayArrowProps>;
   show?: boolean;
   popper?: any;
   closeBtn?: JSX.Element;
@@ -82,7 +80,6 @@ const TooltipBox = React.forwardRef<HTMLDivElement, TooltipBoxProps>(
       className,
       style,
       children,
-      arrowProps,
       popper: _,
       show: _2,
       closeBtn,
@@ -105,10 +102,8 @@ const TooltipBox = React.forwardRef<HTMLDivElement, TooltipBoxProps>(
         className={classNames(className, bsPrefix, `bs-tooltip-${bsDirection}`)}
         {...props}
       >
-        <div className="tooltip-arrow" {...arrowProps} />
         <div className={`${bsPrefix}-inner`}>
           {children}
-          {closeBtn}
         </div>
       </SGDSWrapper>
     );
