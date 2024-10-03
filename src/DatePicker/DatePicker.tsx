@@ -568,7 +568,6 @@ export const DatePicker: BsPrefixRefForwardingComponent<
       const enteredDate = event.target.value;
 
       if (enteredDate === `${dateFormat.toLowerCase()} - ${dateFormat.toLowerCase()}`) {
-        console.log('hello')
         return clear();
       }
 
