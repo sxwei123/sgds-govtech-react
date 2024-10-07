@@ -213,6 +213,7 @@ export const Combobox: BsPrefixRefForwardingComponent<'input', ComboboxProps> =
                 {state.menuList.map((menuItem) => (
                   <DropdownItem
                     as="button"
+                    type="button"
                     key={menuItem}
                     onClick={handleClickItem}
                     onFocus={focusDropdownItem}

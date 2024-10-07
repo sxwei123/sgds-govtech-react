@@ -1,6 +1,7 @@
-import { fireEvent, render, waitFor } from '@testing-library/react';
+import {  render, fireEvent, waitFor } from '@testing-library/react';
 import * as React from 'react';
 import { Combobox } from '../../src';
+import { CustomFilter } from '../../src/Combobox/Combobox';
 const menuList = [
   'Afghanistan',
   'Albania',
@@ -227,10 +228,12 @@ describe('<Combobox> a11y', () => {
   it('dropdown menu has role="listbox" on ul element', async () => {
     const { container } = render(<Combobox menuList={menuList} />);
     fireEvent.click(container.querySelector('input.form-control')!);
-    expect(container.querySelector('ul.dropdown-menu')).toHaveAttribute(
-      'role',
-      'listbox'
-    );
+    await waitFor(() => {
+      expect(container.querySelector('ul.dropdown-menu')).toHaveAttribute(
+        'role',
+        'listbox'
+      );
+    })
   });
   it('form control input aria-controls id points to ul id', async () => {
     const { container } = render(<Combobox menuList={menuList} />);
@@ -239,8 +242,7 @@ describe('<Combobox> a11y', () => {
     const inputAriaControlValue = container
       .querySelector('input.form-control')
       ?.getAttribute('aria-controls');
-
-    expect(inputAriaControlValue).toEqual(menuUlId);
+    await waitFor(() => expect(inputAriaControlValue).toEqual(menuUlId));
   });
 });
 describe('<Combobox>', () => {
@@ -452,7 +454,7 @@ describe('<Combobox>', () => {
     expect(container.querySelectorAll('li>button.dropdown-item').length).toEqual(2);
   });
   it('menuList is filtered with "ang" initialValue and endsWith custom filter method gives 0 items', async () => {
-    const customFilter = (inputValue: string, menuItems: string[]) => {
+    const customFilter: CustomFilter = (inputValue: string, menuItems: string[]) => {
       const filtered = menuItems.filter((n) => {
         const nLowerCase = n.toLowerCase();
         const valueLower = inputValue.toLowerCase();
@@ -599,7 +601,7 @@ describe('<Combobox>', () => {
     const { container } = render(
       <Combobox
         menuList={['apple', 'orange', 'banana']}
-        filterMethod={customFilter}
+        filterMethod={customFilter as CustomFilter}
       />
     );
 
