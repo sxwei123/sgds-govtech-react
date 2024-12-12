@@ -207,7 +207,6 @@ const Overlay = React.forwardRef<HTMLElement, OverlayProps>(
           return React.cloneElement(overlay as React.ReactElement, {
             ...overlayProps,
             placement: updatedPlacement,
-            arrowProps,
             popper,
             className: classNames(
               (overlay as React.ReactElement).props.className,
